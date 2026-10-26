@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1 id="welcomeMessage">환영합니다!</h1>
+
+    <script>
+      console.log("현재 페이지 경로: ", location.pathname);
+
+      if (!localStorage.getItem("hasVisited")) {
+        alert("처음 방문하셨군요!");
+        localStorage.setItem("hasVisited", "true");
+      } else {
+        console.log("이전에 방문한 적이 있습니다.");
+        const welcomeMessage = localStorage.getItem("welcomeMessage");
+        document.getElementById("welcomeMessage").textContent = "또 오셨네요!";
+      }
+    </script>
+  </body>
+</html>

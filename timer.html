@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div
+      style="
+        background-color: yellow;
+        width: 100%;
+        height: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      ">
+      <p style="font-size: 24px; color: red">{count}</p>
+    </div>
+    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px">
+      <button id="startButton">시작</button>
+      <button id="stopButton">중지</button>
+    </div>
+    <script>
+      let count = 0;
+      function updateCount() {
+        document.querySelector("p").textContent = count;
+      }
+      const timerId = setInterval(() => {
+        count++;
+        updateCount();
+        console.log(count);
+      }, 1000);
+
+      const startButton = document.querySelector("#startButton");
+      const stopButton = document.querySelector("#stopButton");
+
+      startButton.addEventListener("click", () => {
+        count = 0;
+        updateCount();
+        const newTimerId = setInterval(() => {
+          count++;
+          updateCount();
+          console.log(count);
+        }, 1000);
+      });
+
+      stopButton.addEventListener("click", () => {
+        clearInterval(timerId);
+      });
+    </script>
+  </body>
+</html>
