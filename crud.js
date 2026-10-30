@@ -107,7 +107,6 @@ async function getMembers() {
 }
 getMembers();
 
-let nextId = 4;
 let editingId = null;
 
 const name = document.getElementById("name");
@@ -146,34 +145,61 @@ function validate() {
 }
 
 const addBtn = document.getElementById("addBtn");
-addBtn.addEventListener("click", function () {
+
+async function addMember(newMember) {
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newMember),
+    });
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
+    await getMembers();
+    showMessage("회원이 추가되었습니다.", false);
+    return true;
+  } catch (error) {
+    console.log(error);
+    showMessage("회원을 추가하지 못했습니다. (" + error.message + ")", true);
+    return false;
+  }
+}
+
+addBtn.addEventListener("click", async function () {
   if (!validate()) {
     return;
   }
+  const memberData = {
+    name: name.value.trim(),
+    studentId: Number(studentId.value),
+    gender: gender.value,
+    major: major.value,
+    email: email.value.trim(),
+  };
+
+  // 요청이 끝날 때까지 중복 클릭 방지
+  addBtn.disabled = true;
+  let success = false;
   if (editingId === null) {
-    const newMember = {
-      id: nextId,
-      name: name.value,
-      studentId: Number(studentId.value),
-      gender: gender.value,
-      major: major.value,
-      email: email.value,
-    };
-    members.push(newMember);
-    nextId++;
+    success = await addMember(memberData);
   } else {
     const target = members.find(function (member) {
       return member.id === editingId;
     });
-    target.name = name.value;
-    target.studentId = Number(studentId.value);
-    target.gender = gender.value;
-    target.major = major.value;
-    target.email = email.value;
+    target.name = memberData.name;
+    target.studentId = memberData.studentId;
+    target.gender = memberData.gender;
+    target.major = memberData.major;
+    target.email = memberData.email;
 
     editingId = null;
+    render();
+    success = true;
   }
+  addBtn.disabled = false;
 
-  render();
-  document.getElementById("memberForm").reset();
+  if (success) {
+    document.getElementById("memberForm").reset();
+  }
 });
