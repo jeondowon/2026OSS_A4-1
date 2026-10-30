@@ -1,29 +1,6 @@
-let members = [
-  {
-    id: 1,
-    name: "홍길동",
-    studentId: 20250001,
-    gender: "남자",
-    major: "AI컴퓨터전자",
-    email: "gildong@example.com",
-  },
-  {
-    id: 2,
-    name: "김영희",
-    studentId: 20250002,
-    gender: "여자",
-    major: "경영경제학부",
-    email: "younghee@example.com",
-  },
-  {
-    id: 3,
-    name: "이철수",
-    studentId: 20250003,
-    gender: "남자",
-    major: "생명과학부",
-    email: "chulsoo@example.com",
-  },
-];
+const API_URL = "https://6adea7974e88f1bba4a53f94.mockapi.io/students";
+
+let members = [];
 
 const tableBody = document.getElementById("memberList");
 
@@ -102,7 +79,20 @@ function render() {
     tr.appendChild(tdManage);
   });
 }
-render();
+
+async function getMembers() {
+  try {
+    const response = await fetch(API_URL);
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
+    members = await response.json();
+    render();
+  } catch (error) {
+    console.log(error);
+  }
+}
+getMembers();
 
 let nextId = 4;
 let editingId = null;
