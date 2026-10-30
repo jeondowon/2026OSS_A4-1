@@ -3,6 +3,16 @@ const API_URL = "https://6adea7974e88f1bba4a53f94.mockapi.io/students";
 let members = [];
 
 const tableBody = document.getElementById("memberList");
+const message = document.getElementById("message");
+
+function showMessage(text, isError) {
+  message.innerText = text;
+  if (isError) {
+    message.className = "error";
+  } else {
+    message.className = "success";
+  }
+}
 
 function render() {
   tableBody.innerHTML = "";
@@ -81,6 +91,7 @@ function render() {
 }
 
 async function getMembers() {
+  showMessage("목록을 불러오는 중...", false);
   try {
     const response = await fetch(API_URL);
     if (!response.ok) {
@@ -88,8 +99,10 @@ async function getMembers() {
     }
     members = await response.json();
     render();
+    showMessage("", false);
   } catch (error) {
     console.log(error);
+    showMessage("목록을 불러오지 못했습니다. (" + error.message + ")", true);
   }
 }
 getMembers();
