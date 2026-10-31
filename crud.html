@@ -50,9 +50,7 @@
           <input type="email" id="email" placeholder="이메일" />
         </div>
         <button id="addBtn" type="button" class="addBtn">저장</button>
-        <button id="cancelBtn" type="button" class="cancelBtn" hidden>
-          수정 취소
-        </button>
+        <button id="cancelBtn" type="button" class="cancelBtn" hidden>수정 취소</button>
       </form>
 
       <p id="message"></p>
@@ -61,20 +59,22 @@
       <div class="searchBox">
         <input type="text" id="search" placeholder="이름 또는 학부 검색" />
       </div>
-      <table border="1" id="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>이름</th>
-            <th>학번</th>
-            <th>성별</th>
-            <th>학부</th>
-            <th>이메일</th>
-            <th>관리</th>
-          </tr>
-        </thead>
-        <tbody id="memberList"></tbody>
-      </table>
+      <div class="tableBox">
+        <table border="1" id="table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>이름</th>
+              <th>학번</th>
+              <th>성별</th>
+              <th>학부</th>
+              <th>이메일</th>
+              <th>관리</th>
+            </tr>
+          </thead>
+          <tbody id="memberList"></tbody>
+        </table>
+      </div>
     </div>
 
     <script src="crud.js"></script>
