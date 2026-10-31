@@ -14,9 +14,28 @@ function showMessage(text, isError) {
   }
 }
 
+const search = document.getElementById("search");
+
 function render() {
   tableBody.innerHTML = "";
-  members.forEach(function (m) {
+
+  // 검색어가 이름이나 학부에 포함된 회원만 보여주기
+  const keyword = search.value.trim();
+  const filtered = members.filter(function (m) {
+    return m.name.includes(keyword) || m.major.includes(keyword);
+  });
+
+  if (filtered.length === 0) {
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 7;
+    td.innerText = "표시할 회원이 없습니다.";
+    tr.appendChild(td);
+    tableBody.appendChild(tr);
+    return;
+  }
+
+  filtered.forEach(function (m) {
     const tr = document.createElement("tr");
 
     const tdId = document.createElement("td");
@@ -83,6 +102,10 @@ function render() {
     tr.appendChild(tdManage);
   });
 }
+
+search.addEventListener("input", function () {
+  render();
+});
 
 async function getMembers() {
   showMessage("목록을 불러오는 중...", false);

@@ -90,3 +90,6 @@ select:focus {
   border-radius: 5px;
   min-width: 80px;
 }
+.searchBox {
+  text-align: right;
+}
