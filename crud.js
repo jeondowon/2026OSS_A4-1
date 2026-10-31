@@ -154,8 +154,24 @@ function validate() {
     name.focus();
     return false;
   }
+  if (name.value.trim().length < 2 || name.value.trim().length > 20) {
+    alert("이름은 2~20자로 입력하세요.");
+    name.focus();
+    return false;
+  }
   if (!/^\d{8}$/.test(studentId.value)) {
     alert("학번이 8자리 숫자인지 확인하세요");
+    studentId.focus();
+    return false;
+  }
+  // 수정 중인 회원은 제외하고 같은 학번이 있는지 확인
+  const sameStudent = members.find(function (member) {
+    return (
+      member.studentId === Number(studentId.value) && member.id !== editingId
+    );
+  });
+  if (sameStudent) {
+    alert("이미 등록된 학번입니다. (" + sameStudent.name + ")");
     studentId.focus();
     return false;
   }
