@@ -20,7 +20,7 @@ Field: id, name, studentId, gender, major, email
 
 기능:
 
-1. Read (GET): 페이지가 열리면 getMembers()가 fetch()로 목록을 받아 members 배열에 넣고 render()로 테이블에 표시한다ㄷ.
+1. Read (GET): 페이지가 열리면 getMembers()가 fetch()로 목록을 받아 members 배열에 넣고 render()로 테이블에 표시한다.
 2. Create (POST): 입력값이 validate()를 통과하면 addMember()가 JSON.stringify()로 만든 데이터를 POST로 보내고, 성공하면 목록을 다시 불러온다.
 3. Update (PUT): 수정 버튼을 누르면 Form에 기존 값을 채우고 editingId를 저장. 저장 버튼을 누르면 editMember()가 해당 id로 PUT 요청을 보낸다. 수정 취소 버튼으로 작업 취소 가능.
 4. Delete (DELETE): confirm()으로 확인한 뒤 deleteMember()가 해당 id로 DELETE 요청을 보낸다.
