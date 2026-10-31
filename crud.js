@@ -57,7 +57,9 @@ function render() {
       major.value = m.major;
       email.value = m.email;
       editingId = m.id;
-      //console.log(editingId);
+      addBtn.innerText = "수정 완료";
+      cancelBtn.hidden = false;
+      showMessage(m.name + " 회원 정보를 수정하는 중입니다.", false);
     });
 
     const deleteBtn = document.createElement("button");
@@ -145,6 +147,19 @@ function validate() {
 }
 
 const addBtn = document.getElementById("addBtn");
+const cancelBtn = document.getElementById("cancelBtn");
+
+function resetForm() {
+  document.getElementById("memberForm").reset();
+  editingId = null;
+  addBtn.innerText = "저장";
+  cancelBtn.hidden = true;
+}
+
+cancelBtn.addEventListener("click", function () {
+  resetForm();
+  showMessage("", false);
+});
 
 async function addMember(newMember) {
   try {
@@ -162,6 +177,26 @@ async function addMember(newMember) {
   } catch (error) {
     console.log(error);
     showMessage("회원을 추가하지 못했습니다. (" + error.message + ")", true);
+    return false;
+  }
+}
+
+async function editMember(id, memberData) {
+  try {
+    const response = await fetch(API_URL + "/" + id, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(memberData),
+    });
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
+    await getMembers();
+    showMessage("회원 정보가 수정되었습니다.", false);
+    return true;
+  } catch (error) {
+    console.log(error);
+    showMessage("회원 정보를 수정하지 못했습니다. (" + error.message + ")", true);
     return false;
   }
 }
@@ -184,22 +219,11 @@ addBtn.addEventListener("click", async function () {
   if (editingId === null) {
     success = await addMember(memberData);
   } else {
-    const target = members.find(function (member) {
-      return member.id === editingId;
-    });
-    target.name = memberData.name;
-    target.studentId = memberData.studentId;
-    target.gender = memberData.gender;
-    target.major = memberData.major;
-    target.email = memberData.email;
-
-    editingId = null;
-    render();
-    success = true;
+    success = await editMember(editingId, memberData);
   }
   addBtn.disabled = false;
 
   if (success) {
-    document.getElementById("memberForm").reset();
+    resetForm();
   }
 });
