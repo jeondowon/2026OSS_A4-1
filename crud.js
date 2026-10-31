@@ -66,19 +66,11 @@ function render() {
     deleteBtn.innerText = "삭제";
     deleteBtn.className = "deleteBtn";
     deleteBtn.addEventListener("click", function () {
-      if (confirm("삭제하시겠어요?")) {
-        members = members.filter(function (member) {
-          if (member.id !== m.id) {
-            return true;
-          } else {
-            return false;
-          }
-        });
+      if (confirm(m.name + " 회원을 삭제하시겠어요?")) {
         if (editingId === m.id) {
-          editingId = null;
-          document.getElementById("memberForm").reset();
+          resetForm();
         }
-        render();
+        deleteMember(m.id);
       }
     });
 
@@ -108,6 +100,22 @@ async function getMembers() {
   }
 }
 getMembers();
+
+async function deleteMember(id) {
+  try {
+    const response = await fetch(API_URL + "/" + id, {
+      method: "DELETE",
+    });
+    if (!response.ok) {
+      throw new Error("HTTP " + response.status);
+    }
+    await getMembers();
+    showMessage("회원이 삭제되었습니다.", false);
+  } catch (error) {
+    console.log(error);
+    showMessage("회원을 삭제하지 못했습니다. (" + error.message + ")", true);
+  }
+}
 
 let editingId = null;
 
